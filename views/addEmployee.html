@@ -1,0 +1,17 @@
+<html>
+<head></head>
+<body ng-app="employeeApp">
+<form action="" ng-controller="employeeInfoController">
+	<table>
+		<tr><td><input type="text" name="name" ng-model="name" placeholder="Name"/></td></tr>
+		<tr><td><input type="text" name="id" ng-model="id" placeholder="Id"/></td></tr>
+		<tr><td><input type="text" name="designation" ng-model="designation" placeholder="Designation"/></td></tr>
+		<tr><td><input type="text" name="yearsOfExp" ng-model="yearsOfExp" placeholder="Years of Experiance"/></td></tr>
+		<tr><td><input type="text" name="currentProj" ng-model="currentProj" placeholder="Current Project"/></td></tr>
+		<tr><td><input type="text" name="reportingTo" ng-model="reportingTo" placeholder="Reporting To"/></td></tr>
+		<tr><td><input type="textArea" name="techStack" ng-model="techStack" placeholder="Enter your technology stack"/></td></tr>
+		<tr><td><button ng-click="addEmployee()">AddProfile</button></td></tr>
+	</table>	
+</form>		
+</body>	
+</html>

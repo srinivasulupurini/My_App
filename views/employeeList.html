@@ -1,0 +1,35 @@
+<html>
+<head>
+<body ng-app="employeeApp">
+<div ng-controller="employeeInfoController" ng-init="loadEmployees()">
+	<h4>EmployeeList</h4>
+	<ul>
+	<div ng-repeat="employee in employees">	
+	<li>
+		<span ng-click="getEmployeeProfile(employee.id)">{{employee.name}}</span>
+	</li>
+	</div>	
+	</ul>
+	
+<div>
+	<button ng-click="addProfile()">Add New Employee</button>
+</div>
+<div ng-show="showProfile">
+<h4> {{employeeById.name}} Profile</h4><button ng-click="editProfile(employeeById)">Edit Profile</button>
+     <button ng-click="deleteProfile(employeeById)">Delete Profile</button>
+	<ul>
+		<li><h4>Employee Id</h4>{{employeeById.id}}</li>
+		<li><h4>Designation</h4>{{employeeById.designation}}</li>
+		<li><h4>Years of Experience</h4>{{employeeById.yearsOfExp}}</li>
+		<li><h4>Current Project</h4>{{employeeById.currentProject}}</li>
+		<li><h4>Reporting To</h4>{{employeeById.reportingTo}}</li>
+		<li><h4>Tech Stack</h4>{{employeeById.techStack}}</li>
+		
+	</ul>
+	
+	
+</div>
+		
+</div>	
+</head>	
+</html>
