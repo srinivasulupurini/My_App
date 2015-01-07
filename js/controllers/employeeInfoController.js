@@ -67,7 +67,7 @@ employeeApp.controller('employeeInfoController',function($scope,$location,$http,
 		console.log(response.data.name);		
 	    $scope.employeeById = response.data;	
 		$scope.showProfile = true;	
-		console.log("Controller:getProfile response"+data);
+		console.log("Controller:getProfile response"+response.data);
 		},
 		function(error){
 		console.log("Err:Controller:getProfile response"+error);	
