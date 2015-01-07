@@ -1,3 +1,11 @@
+// 
+//  EmployeeApp.js
+//  Employee portal
+//  
+//  Created by srinivasulup on 2015-01-07.
+//  Copyright 2015 srinivasulup. All rights reserved.
+// 
+
 var employeeApp = angular.module('employeeApp',[]);
 
 employeeApp.config(function($routeProvider){

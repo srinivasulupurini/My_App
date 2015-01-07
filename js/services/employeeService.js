@@ -1,3 +1,11 @@
+// 
+//  employeeService.js
+//  Employee portal
+//  
+//  Created by srinivasulup on 2015-01-07.
+//  Copyright 2015 srinivasulup. All rights reserved.
+// 
+
 employeeApp.factory('employeeService',function(){
 	
 	var _employees = [];
@@ -67,8 +75,14 @@ employeeApp.factory('employeeService',function(){
     }
     var _profileTobeEdited = new Object();
     
-	var _addEmployee = function(employee){
-	_employees.push(employee);
+	var _addEmployee = function(http,employee){
+	//_employees.push(employee);
+	http({
+    method: 'POST',
+    url: 'http://localhost:8000/addEmployee',
+    headers: {'Content-Type': 'application/json','Access-Control-Allow-Origin':"*"},
+    data: JSON.stringify(employee)
+	}).success(function () {});
 	alert("added"+employee.name+"to list"+_employees.length);	
 	}
 	
@@ -89,22 +103,32 @@ employeeApp.factory('employeeService',function(){
 		}
 	}
 	
-	var _deleteEmployee = function(employee){
-	_employees.splice(_employees.indexOf(employee),1,_employees);	
+	var _deleteEmployee = function(http,employee){
+	http.get('http://localhost:8000/removeEmployee/'+employee.id)
+		.success(function(data){
+			console.log('EmployeeService:::deleted employee');
+		_employees.splice(_employees.indexOf(employee),1);	
+		})
+		.error(function(data){
+			console.log(data);
+		});	
 	}
 	
 	var _getEmployees = function(){
 		//get employee names from mongodb using nodejs
 	}
 	
-	var _getEmployeeProfile = function(employeeId){
-		 var employee;
-		 for(var i=0;i<_employees.length;i++){
-		 	if(_employees[i].id==employeeId)
-		 	return _employees[i];
-		 }
-		 return employee;
-		
+	var _getEmployeeProfile = function(http,employeeId,callback){
+		 return http.get('http://localhost:8000/findEmployee/'+employeeId)
+		.success(function(data){
+			console.log("EmployeeService::getEmployeeProfile"+data);
+		    //data.prototype = new Employee();
+			return data;
+		})
+		.error(function(data){
+			console.log(data);
+			return data
+		});
 	}
 	
 	var _setProfileToBeEdited = function(employeeProfile){
@@ -117,6 +141,9 @@ employeeApp.factory('employeeService',function(){
 	}
 	
 	var _loadEmployees = function(http){
+		if(_employees.length>0){
+			_employees.splice(0,_employees.length);
+		}
 		http.get('http://localhost:8000/getEmployees')
 		.success(function(data){
 			data.forEach(function(item){
@@ -130,6 +157,20 @@ employeeApp.factory('employeeService',function(){
 		});
 	}
 	
+	var _saveProfile_new = function(http,profile){
+	http({
+    method: 'POST',
+    url: 'http://localhost:8000/updateEmployee/'+profile.id,
+    headers: {'Content-Type': 'application/json','Access-Control-Allow-Origin':"*"},
+    data: JSON.stringify(profile)
+	}).success(function () {
+	});
+	}
+	
+	var _refreshEmployeeList= function(){
+		this._employees=[];
+	}
+	
 	return{
 		employees:_employees,
 		createEmployee:_createEmployee,
@@ -137,10 +178,11 @@ employeeApp.factory('employeeService',function(){
 		getProfileToBeEdited:_getProfileToBeEdited,
 		setProfileToBeEdited:_setProfileToBeEdited,
 		addEmployee:_addEmployee,
-		saveProfile:_saveProfile,
+		saveProfile:_saveProfile_new,
 		deleteEmployee:_deleteEmployee,
 		getEmployees:_getEmployees,
 		getEmployeeProfile:_getEmployeeProfile,
-		loadEmployees:_loadEmployees
+		loadEmployees:_loadEmployees,
+		refreshEmployeeList:_refreshEmployeeList
 	}
 });

@@ -1,3 +1,12 @@
+// 
+//  employeeInfoController.js
+//  Employee portal
+//  
+//  Created by srinivasulup on 2015-01-07.
+//  Copyright 2015 srinivasulup. All rights reserved.
+// 
+//author srinivas purini
+
 employeeApp.controller('employeeInfoController',function($scope,$location,$http,employeeService){
 	$scope.addEmployee = function(employee){
 		var employee=employeeService.createEmployee();
@@ -8,7 +17,8 @@ employeeApp.controller('employeeInfoController',function($scope,$location,$http,
 		employee.setCurrentProject($scope.currentProj);
 		employee.setReportingTo($scope.reportingTo);
 		employee.setTechStack($scope.techStack);
-		employeeService.addEmployee(employee);
+		employeeService.addEmployee($http,employee);
+		employeeService.refreshEmployeeList();
 		$location.path('/employeeList');
 	}
 	
@@ -38,22 +48,34 @@ employeeApp.controller('employeeInfoController',function($scope,$location,$http,
 		employee.setCurrentProject($scope.currentProj);
 		employee.setReportingTo($scope.reportingTo);
 		employee.setTechStack($scope.techStack);
-		employeeService.saveProfile(employee);
+		employeeService.saveProfile($http,employee);
+		employeeService.refreshEmployeeList();
 		$location.path('/employeeList');
 		
 	}
 	
 	$scope.deleteProfile=function(employee){
-		employeeService.deleteEmployee(employee);
+		employeeService.deleteEmployee($http,employee);
 		$scope.showProfile = false;
-		$scope.$apply();
-		$location.path('/employeeList');
 	}
+	
+	
 	$scope.getEmployeeProfile=function(employeeId){
-		$scope.employeeById=employeeService.getEmployeeProfile(employeeId);
-		$scope.showProfile = true;
+	   //used promises to handle the asynchronous calls	
+		employeeService.getEmployeeProfile($http,employeeId)
+		.then(function(response){
+		console.log(response.data.name);		
+	    $scope.employeeById = response.data;	
+		$scope.showProfile = true;	
+		console.log("Controller:getProfile response"+data);
+		},
+		function(error){
+		console.log("Err:Controller:getProfile response"+error);	
+		});
+		
 	}
-	//
+	
+	
 	
 	$scope.addProfile = function(){
 		$location.path('addEmployee');
